@@ -1,5 +1,4 @@
 import Logger from 'bunyan';
-import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -13,7 +12,7 @@ const pidPath: string = (process.env.PID_PATH as string) || '.';
 export let nodeProcesses: string = `ps -eo pid,command | grep node | grep -v grep`;
 //export let nodeProcesses: string = `ps -eo pid,command | grep -v grep`;
 
-export async function create(logger: Logger, name: string): Promise<boolean> {
+export async function create(logger: Logger, name: string): Promise<string> {
 	const methodName: string = 'create';
 	logger.debug({ moduleName, methodName, name }, `Starting...`);
 
@@ -54,15 +53,16 @@ export async function create(logger: Logger, name: string): Promise<boolean> {
 			logger.debug({ moduleName, methodName, linePid });
 
 			if (linePid === pidFilePid) {
-				logger.debug({ moduleName, methodName, name }, `Sorry, already running.`);
-				return false;
+				logger.info({ moduleName, methodName, name }, `Sorry, already running.`);
+				return '';
 			}
 		}
 	}
 
 	try {
 		fs.writeFileSync(pidFilename, Buffer.from(processPid));
-		return true;
+		logger.info({ moduleName, methodName, name, pidFilename }, `Successfully created.`);
+		return pidFilename;
 	}
 	catch (err) {
 		logger.error({ moduleName, methodName, err });

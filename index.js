@@ -1,5 +1,5 @@
 // index.js
 
-var node-pid = require('./src/index');
+var nodePid = require('./src/index');
 
-exports.create = node-pid.create;
+exports.create = nodePid.create;

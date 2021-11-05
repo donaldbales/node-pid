@@ -1,10 +1,10 @@
 # node-pid
 
-Creates a pid file and returns true, if an existing pid file does not exist, or the correspnding process for the pid in an existsing file is no longer running. Otherwise, it returns false.
+Creates a pid file and returns the filename, if an existing pid file does not exist, or the corresponding process for the pid in an existsing file is no longer running. Otherwise, it returns any empty string..
 
 ## Release
 
-0.0.1 Just coded. Not tested very well yet. ;)
+0.0.3 Added support for all node v8 platforms.
 
 
 ## How to clone, install modules, and compile
@@ -39,10 +39,14 @@ In Node.js:
 const nodePid = require('node-pid');
 
 // To create a pid file:
-const name = 'myPidFilename';
-if (await nodePid.create(logger, name) {
+const pidFilename = await nodePid.create(logger, 'myPidFilename');
+if (pifFilename) {
 	// Another process by this name is not running
 	// so go ahead and do your processing...
+
+
+  // All done: delete the pid file:
+  fs.unlinkSync(pidFilename);    
 } else {
 	// Sorry, already running!
 	process.exit(1);

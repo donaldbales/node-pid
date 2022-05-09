@@ -12,7 +12,7 @@ const pidPath: string = (process.env.PID_PATH as string) || '.';
 export let aixNodeProcesses: string = `ps -Ao pid,comm | grep node | grep -v grep`;
 export let freeBsdNodeProcesses: string = `ps -ao pid,command | grep node | grep -v grep`;
 export let openBsdNodeProcesses: string = `ps -Ao pid,command | grep node | grep -v grep`;
-export let unixNodeProcesses: string = `ps -eo pid,command | grep node | grep -v grep`;
+export let unixNodeProcesses: string = `ps -eo pid,command | grep -e node -e PID | grep -v grep`;
 export let windowsNodeProcesses: string = `tasklist /fo csv`;
 
 export async function checkAixProcesses(logger: Logger, pidFilePid: string): Promise<boolean> {
@@ -108,8 +108,8 @@ export async function checkUnixProcesses(logger: Logger, pidFilePid: string): Pr
 	
 	const lines: string[] = runningNodeProcesses.stdout.split('\n') || [];
 	logger.debug({ moduleName, methodName, lines });
-
-	const end: number = lines.length > 0 && lines[0].indexOf('PID') !== -1 ? lines[0].indexOf('PID') + 3 : 5;
+// 2454987 node --max-old-space-size=16384 --unhandled-rejections=strict src/products/index
+	const end: number = lines.length > 0 && lines[0].indexOf('PID') !== -1 ? lines[0].indexOf('PID') + 3 : lines[0].indexOf(' ');
 	logger.debug({ moduleName, methodName, end });
 
 	for (const line of lines) {

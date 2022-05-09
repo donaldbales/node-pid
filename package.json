@@ -1,6 +1,6 @@
 {
   "name": "node-pid",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Creates a pid file and returns the filename, if an existing pid file does not exist, or the corresponding process for the pid in an existsing file is no longer running. Otherwise, it returns any empty string.",
   "main": "index.js",
   "scripts": {
